@@ -39,7 +39,6 @@ StackedAreaChart.prototype.initVis = function(){
 
 	// TO-DO: Overlay with path clipping
 
-
     // Scales and axes
     vis.x = d3.scaleTime()
         .range([0, vis.width])
@@ -61,24 +60,27 @@ StackedAreaChart.prototype.initVis = function(){
     vis.svg.append("g")
         .attr("class", "y-axis axis");
 
-
 	// TO-DO: Initialize stack layout
-	
-    // TO-DO: Rearrange data
+    var dataCategories = colorScale.domain();
+    var stack = d3.stack()
+        .keys(dataCategories);
 
+    vis.stackedData = stack(vis.data);
+
+    // TO-DO: Rearrange data
     // TO-DO: Stacked area layout
-	// vis.area = d3.area()
-	//	...
+	vis.area = d3.area()
+        .x(function(d) { return vis.x(d.data.Year); })
+        .y0(function(d) { return vis.y(d[0]); })
+        .y1(function(d) { return vis.y(d[1]); });
 
 
 	// TO-DO: Tooltip placeholder
 
 
 	// TO-DO: (Filter, aggregate, modify data)
-    // vis.wrangleData();
+    vis.wrangleData();
 }
-
-
 
 /*
  * Data wrangling

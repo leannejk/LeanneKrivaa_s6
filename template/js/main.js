@@ -47,13 +47,15 @@ function loadData() {
 
 function createVis() {
 
-	// TO-DO: Instantiate visualization objects here
-	// areachart = new ...
-    var stackedAreaChart = new StackedAreaChart("stacked-area-chart", allData.layers)
+    areachart = new StackedAreaChart("stacked-area-chart", allData.layers)
+    timeline = new Timeline("timeline", allData.years)
 }
 
 
 function brushed() {
 
-	// TO-DO: React to 'brushed' event
+    var selection = areachart.x.range();
+    areachart.x.domain(selection.map(timeline.x.invert, timeline.x));
+
+    areachart.wrangleData();
 }
