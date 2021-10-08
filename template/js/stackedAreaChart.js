@@ -38,6 +38,11 @@ StackedAreaChart.prototype.initVis = function(){
 	    .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
 	// TO-DO: Overlay with path clipping
+    vis.svg.append("defs").append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", vis.width)
+        .attr("height", vis.height);
 
     // Scales and axes
     vis.x = d3.scaleTime()
@@ -60,6 +65,8 @@ StackedAreaChart.prototype.initVis = function(){
     vis.svg.append("g")
         .attr("class", "y-axis axis");
 
+
+
 	// TO-DO: Initialize stack layout
     var dataCategories = colorScale.domain();
     var stack = d3.stack()
@@ -76,6 +83,9 @@ StackedAreaChart.prototype.initVis = function(){
 
 
 	// TO-DO: Tooltip placeholder
+    vis.tooltip = vis.svg.append("text")
+        .attr("x", vis.margin.left / 2)
+        .attr("y", vis.margin.top / 2)
 
 
 	// TO-DO: (Filter, aggregate, modify data)
@@ -130,9 +140,12 @@ StackedAreaChart.prototype.updateVis = function(){
         .attr("d", function(d) {
             return vis.area(d);
         })
+        // TO-DO: Update tooltip text
+        .on("mouseenter", function (d, i){
+            return vis.tooltip.text(String(i.key))
+        })
+        .on("mouseout", function (){return vis.tooltip.text("")})
 
-
-    // TO-DO: Update tooltip text
 
 	categories.exit().remove();
 

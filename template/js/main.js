@@ -52,10 +52,13 @@ function createVis() {
 }
 
 
-function brushed() {
+function brushed({selection}) {
 
-    var selection = areachart.x.range();
-    areachart.x.domain(selection.map(timeline.x.invert, timeline.x));
+    areachart.x.domain(
+        !selection ? timeline.x.domain() : selection.map(timeline.x.invert)
+    );
 
     areachart.wrangleData();
 }
+
+
